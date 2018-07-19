@@ -1,4 +1,4 @@
-package redis_Test;
+package util;
 
 import redis.clients.jedis.*;
 
@@ -31,9 +31,13 @@ public class RedisConn
 
 	private static Jedis Dis;
 
-	private static final String Url = "10.120.0.25";
+	private static final String Url = Config.RedisIP();
 
-	private static final int Port = 6380;
+	private static final int Port = Config.RedisPort();
+
+	private static final String PassWord = Config.PassWord();
+
+	private static final int Db = Config.RedisDb();
 
 	public static Jedis GetJedis()
 	{
@@ -51,10 +55,9 @@ public class RedisConn
 					config.setMaxIdle(MAX_IDLE);
 					config.setMaxWait(MAX_WAIT);
 					config.setTestOnBorrow(TEST_ON_BORROW);
-					
-					JedisPool = new JedisPool(config, Url, Port, TIMEOUT, "tendency123456",1);
-					
-				
+
+					JedisPool = new JedisPool(config, Url, Port, TIMEOUT, PassWord, Db);
+
 					Dis = JedisPool.getResource();
 				}
 
