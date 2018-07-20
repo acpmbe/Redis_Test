@@ -60,7 +60,7 @@ public class Main
 
 		}
 
-		System.out.println("运行成功：请输入相关命令，如需帮助请按0");
+		System.out.println("Redis测试运行成功：请输入相关命令，如需帮助请按0");
 
 		int Key = 0;
 		String KeyStr = "";
