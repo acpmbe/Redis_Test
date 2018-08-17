@@ -1,16 +1,19 @@
 package redis_Test;
 
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import bll.cmdS.Redis_Bll;
 
+import bll.cmdS.Redis_Bll;
+import bll.cmdS.Write_3;
+import redis.clients.jedis.Jedis;
+import util.RedisConn;
 
 public class Main
 {
-
-	
 
 	static boolean isNumeric(String str)
 	{
@@ -22,7 +25,6 @@ public class Main
 		}
 		return true;
 	}
-
 
 	static String Init()
 	{
@@ -49,6 +51,56 @@ public class Main
 
 	}
 
+	public static void RedisRead(String collName)
+	{
+		Jedis dis = RedisConn.GetJedis();
+
+		Long start = System.currentTimeMillis();
+
+		String content = dis.rpop(collName);
+
+		if (content.equals(""))
+		{
+			System.out.println("数据为空");
+		}
+
+		String[] ListData = content.split(",");
+
+		Long end = System.currentTimeMillis();
+
+		Long time = end - start;
+
+		System.out.println("程序运行：" + time + "ms");
+
+		System.out.println("数量：" + ListData.length);
+
+	}
+
+	public static void RedisWrite(String collName)
+	{
+
+		String string = "DC000000000000000011320600010007000000006400649D00000001009D0000000A0001F112011E0F000A143004244838A6FF434D43432D7156747100C0E8F97FD8E8F97F000000000000000001000000A0D39A0000000000000000000000000000000000000000000000000000000000000000000100000000003344";
+
+		String sssd = "";
+		for (int i = 0; i < 3; i++)
+		{
+			if (i < (3 - 1))
+			{
+				sssd += string + ",";
+			}
+			else
+			{
+				sssd += string;
+			}
+
+		}
+
+		Jedis dis = RedisConn.GetJedis();
+
+		dis.lpush(collName, "");
+
+	}
+
 	public static void main(String[] args)
 	{
 
@@ -61,6 +113,8 @@ public class Main
 		}
 
 		System.out.println("Redis测试运行成功：请输入相关命令，如需帮助请按0");
+
+		// Redis_Bll.RedisCount();
 
 		int Key = 0;
 		String KeyStr = "";
@@ -112,12 +166,27 @@ public class Main
 			case 3:
 
 				Redis_Bll.Write_Always(Integer.parseInt(array[1]), Integer.parseInt(array[2]));
+
 				break;
+
 			case 4:
+
+				// Redis_Bll.Write_Always_N_1(Integer.parseInt(array[1]),
+				// Integer.parseInt(array[2]));
+
+				// Write_3 w = new Write_3();
+				//
+				// w.Write_Always_N_1(Integer.parseInt(array[1]), Integer.parseInt(array[2]));
+
+				Redis_Bll.Write_Always_N_1(Integer.parseInt(array[1]), Integer.parseInt(array[2]));
+
+				break;
+			case 5:
 
 				Redis_Bll.Read_Always(Integer.parseInt(array[1]));
 				break;
-			case 5:
+
+			case 6:
 
 				System.exit(0);
 				break;

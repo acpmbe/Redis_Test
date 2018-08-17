@@ -38,6 +38,26 @@ public class RedisConn
 	private static final String PassWord = Config.PassWord();
 
 	private static final int Db = Config.RedisDb();
+	
+	
+	public void tt()
+	{
+		String Url="192.168.135.25";
+		int Port= 6380;
+		String PassWord= "tendency123456";
+		
+		JedisPoolConfig config = new JedisPoolConfig();
+		config.setMaxActive(-1);
+		config.setMaxIdle(200);
+		config.setMaxWait(10000);
+		config.setTestOnBorrow(false);
+
+		JedisPool	JedisPool = new JedisPool(config, Url, Port, 100000, PassWord, 1);
+		
+
+		
+		Jedis	Dis = JedisPool.getResource();
+	}
 
 	public static Jedis GetJedis()
 	{
@@ -58,6 +78,7 @@ public class RedisConn
 
 					JedisPool = new JedisPool(config, Url, Port, TIMEOUT, PassWord, Db);
 
+					
 					Dis = JedisPool.getResource();
 				}
 

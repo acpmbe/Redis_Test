@@ -132,6 +132,145 @@ public class Redis_Bll
 		System.out.println("批量写入测试：" + "当前时间：" + tf.format(new Date()) + "  写入次数：" + Num + "  数据总量：" + (Num * Lenght)
 				+ "  总用时：" + (end - start) + "ms" + "  写入平均时间： " + Ave + "ms");
 
+		array = null;
+
+	}
+
+	public static void Write_Always_N(int count, int lenght)
+	{
+
+		long start;
+		long end;
+
+		Jedis dis = RedisConn.GetJedis();
+
+		SimpleDateFormat tf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		String content = "DC000000000000000011320600010007000000006400649D00000001009D0000000A0001F112011E0F000A143004244838A6FF434D43432D7156747100C0E8F97FD8E8F97F000000000000000001000000A0D39A0000000000000000000000000000000000000000000000000000000000000000000100000000003344";
+		String ConN = "";
+		int Lenght = lenght;
+
+		int cc_Lenght = lenght - 1;
+
+		long startTime;
+		long EndTime;
+		long RunTime;
+		long CountTime = 0;
+		int Num = 0;
+		DecimalFormat df = new DecimalFormat("0.00");
+		String Ave;
+
+		ConN = content;
+
+		start = System.currentTimeMillis();
+		for (int i = 0; i < cc_Lenght; i++)
+		{
+
+			ConN += "," + content;
+
+		}
+
+		end = System.currentTimeMillis();
+		;
+
+		System.out.println("组织数据时间：" + (end - start) + "ms");
+
+		start = System.currentTimeMillis();
+
+		for (int i = 0; i < count; i++)
+		{
+
+			Num++;
+			startTime = System.currentTimeMillis(); // 获取开始时间
+
+			dis.lpush(ListName, ConN);
+
+			EndTime = System.currentTimeMillis(); // 获取开始时间
+
+			RunTime = EndTime - startTime;
+
+			CountTime += RunTime;
+
+		}
+
+		end = System.currentTimeMillis();
+
+		Ave = df.format((float) CountTime / Num);
+
+		System.out.println("批量写入测试：" + "当前时间：" + tf.format(new Date()) + "  写入次数：" + Num + "  数据总量：" + (Num * Lenght)
+				+ "  总用时：" + (end - start) + "ms" + "  写入平均时间： " + Ave + "ms");
+
+	}
+
+	public static void Write_Always_N_1(int count, int lenght)
+	{
+
+		long start;
+		long end;
+
+		Jedis dis = RedisConn.GetJedis();
+
+		SimpleDateFormat tf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		String content = "DC000000000000000011320600010007000000006400649D00000001009D0000000A0001F112011E0F000A143004244838A6FF434D43432D7156747100C0E8F97FD8E8F97F000000000000000001000000A0D39A0000000000000000000000000000000000000000000000000000000000000000000100000000003344";
+		String content_N = ",DC000000000000000011320600010007000000006400649D00000001009D0000000A0001F112011E0F000A143004244838A6FF434D43432D7156747100C0E8F97FD8E8F97F000000000000000001000000A0D39A0000000000000000000000000000000000000000000000000000000000000000000100000000003344";
+		StringBuffer buffer = new StringBuffer(content);
+
+		String ConN = "";
+		int Lenght = lenght;
+
+		int cc_Lenght = lenght - 1;
+
+		long startTime;
+		long EndTime;
+		long RunTime;
+		long CountTime = 0;
+		int Num = 0;
+		DecimalFormat df = new DecimalFormat("0.00");
+		String Ave;
+
+		ConN = content;
+
+		start = System.currentTimeMillis();
+		for (int i = 0; i < cc_Lenght; i++)
+		{
+
+			buffer.append(content_N);
+
+		}
+
+		end = System.currentTimeMillis();
+		;
+
+		System.out.println("组织数据时间：" + (end - start) + "ms");
+
+		start = System.currentTimeMillis();
+
+		for (int i = 0; i < count; i++)
+		{
+
+			Num++;
+			startTime = System.currentTimeMillis(); // 获取开始时间
+
+			dis.lpush(ListName, buffer.toString());
+
+			EndTime = System.currentTimeMillis(); // 获取开始时间
+
+			RunTime = EndTime - startTime;
+
+			CountTime += RunTime;
+
+		}
+
+		end = System.currentTimeMillis();
+
+		Ave = df.format((float) CountTime / Num);
+
+		System.out.println("批量写入测试：" + "当前时间：" + tf.format(new Date()) + "  写入次数：" + Num + "  数据总量：" + (Num * Lenght)
+				+ "  总用时：" + (end - start) + "ms" + "  写入平均时间： " + Ave + "ms");
+		
+	
+
 	}
 
 	public static void Read_Always(int lenght)
@@ -197,6 +336,17 @@ public class Redis_Bll
 		{
 			e.printStackTrace();
 		}
+
+	}
+
+	public static void RedisCount()
+	{
+
+		Jedis dis = RedisConn.GetJedis();
+
+		Long sddd = dis.llen(Config.ListName());
+
+		System.out.println(sddd);
 
 	}
 
